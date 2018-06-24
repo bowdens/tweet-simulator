@@ -35,7 +35,10 @@ class Markov(object):
 
     def get_next_word(self, word):
         if not self.graph.is_vertex(word):
-            raise ValueError("That word is has not been seen before")
+            string = "\"" + word + "\": "
+            for letter in word:
+                string += str(ord(letter)) + " "
+            raise ValueError("That word is has not been seen before (\"{}\")".format(string))
 
         total = 0
         for v in self.graph.verticies:
