@@ -1,4 +1,4 @@
-from graph import Graph
+from src.graph import Graph
 import random
 
 class Markov(object):
