@@ -12,14 +12,18 @@ class Markov(object):
     # add all the words in the list to the graph
     def add_words(self, words):
         # make sure words is a list
-        if not isinstance(sentence, list):
+        if not isinstance(words, list):
             raise TypeError("Words must be a list")
 
         if len(words) == 0:
             return
 
+        # add the start of the sentence and the end of the sentence characters
+        words.insert(0, "\2")
+        words.append("\3");
+
         # add the first word in the list
-        if not isinstance(word, str):
+        if not isinstance(words[0], str):
             raise TypeError("All words must be a string")
         if not self.graph.is_vertex(words[0]):
             self.graph.add_vertex(words[0])
@@ -27,7 +31,7 @@ class Markov(object):
 
         # from the 2nd word in the list to the last, add each and increment the edge
         for i in range(1, len(words)):
-            if not isinstance(word, str):
+            if not isinstance(words[i], str):
                 # make sure each element is a string
                 raise TypeError("All words must be a string")
 
