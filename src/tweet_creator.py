@@ -13,7 +13,7 @@ def parse_tweet(tweet, name):
 
 def create_tweet(api,reply_id,reply_name, target, send_tweet=True, verbose=False):
     if verbose:
-        print("Creating a tweet in response to @{} about @{}".format(reply_name, target))
+        print("Creating a tweet in response to @{} about {}".format(reply_name, target))
 
     # get all the tweets
     all_tweets = get_all_tweets(api,target)
@@ -24,13 +24,20 @@ def create_tweet(api,reply_id,reply_name, target, send_tweet=True, verbose=False
         # create a markov chain with all of the tweets, then use it to create the tweet
         markov = Markov()
         for tweet in all_tweets:
-            markov.add_sentence(tweet.full_text)
+            # create list of words in tweet and remove disallowed ones
+            words = tweet.full_text.split()
+            for word in words:
+                # get rid of any t.co links (images)
+                if "t.co" in word:
+                    words.remove(word)
+
+            markov.add_words(words)
+
         reply_text = markov.create_sentence()
         tweet_prefix = "@{}\n{} says:\n".format(reply_name,target[1:])
         while(len(reply_text) > 240 - len(tweet_prefix)):
             reply_text = markov.create_sentence()
         tweet_text = tweet_prefix + reply_text
-        print("tweet is {}".format(tweet_text))
     if send_tweet:
         # send the tweet, print the error message if there is any
         try:
@@ -38,8 +45,7 @@ def create_tweet(api,reply_id,reply_name, target, send_tweet=True, verbose=False
         except Exception as e:
             print("\terror with the following tweet: {}".format(e))
 
-        if verbose:
-            print("\tTweeted \n\"{}\"\n to \"{}\" in response to tweet #{}\n".format(tweet_text, target, reply_id))
+        print("\tTweeted \n\"{}\"\n to \"{}\" in response to tweet #{}\n".format(tweet_text, target, reply_id))
     else:
         if verbose:
             print("\tDID NOT tweet \n\"{}\"\n to \"{}\" in response to tweet #{}\n".format(tweet_text, target, reply_id))
