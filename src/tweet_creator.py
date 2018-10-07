@@ -30,6 +30,9 @@ def create_tweet(api,reply_id,reply_name, target, send_tweet=True, verbose=False
                 # get rid of any t.co links (images)
                 if "t.co" in word:
                     words.remove(word)
+                # remove @ mentions
+                if word.startswith("@"):
+                    words.remove(word)
 
             markov.add_words(words)
 
