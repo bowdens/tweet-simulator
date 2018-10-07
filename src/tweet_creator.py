@@ -24,7 +24,15 @@ def create_tweet(api,reply_id,reply_name, target, send_tweet=True, verbose=False
         # create a markov chain with all of the tweets, then use it to create the tweet
         markov = Markov()
         for tweet in all_tweets:
-            markov.add_sentence(tweet.full_text)
+            # create list of words in tweet and remove disallowed ones
+            words = tweet.full_text.split()
+            for word in words:
+                # get rid of any t.co links (images)
+                if "t.co" in word:
+                    words.remove(word)
+
+            markov.add_sentence(words)
+
         reply_text = markov.create_sentence()
         tweet_prefix = "@{}\n{} says:\n".format(reply_name,target[1:])
         while(len(reply_text) > 240 - len(tweet_prefix)):

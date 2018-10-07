@@ -9,29 +9,34 @@ class Markov(object):
     def graph(self):
         return self.__graph
 
-    def add_sentence(self, sentence):
-        if not isinstance(sentence, str):
-            raise TypeError("Setence must be a string")
+    # add all the words in the list to the graph
+    def add_words(self, words):
+        # make sure words is a list
+        if not isinstance(sentence, list):
+            raise TypeError("Words must be a list")
 
-        words = []
-        tmp_words = sentence.split()
-        tmp_words.insert(0, "\2")
-        tmp_words.append("\3")
-        for word in tmp_words:
-            if word[0] == '@':
-                words.append(word[1:])
-                if not self.graph.is_vertex(word[1:]):
-                    self.graph.add_vertex(word[1:])
-            elif "twitter.com" in word:
-                continue
-            else:
-                if not self.graph.is_vertex(word):
-                    self.graph.add_vertex(word)
-                words.append(word)
+        if len(words) == 0:
+            return
+
+        # add the first word in the list
+        if not isinstance(word, str):
+            raise TypeError("All words must be a string")
+        if not self.graph.is_vertex(words[0]):
+            self.graph.add_vertex(words[0])
 
 
-        for i in range(0, len(words)-1):
-            self.graph.increment_edge(words[i], words[i+1])
+        # from the 2nd word in the list to the last, add each and increment the edge
+        for i in range(1, len(words)):
+            if not isinstance(word, str):
+                # make sure each element is a string
+                raise TypeError("All words must be a string")
+
+            if not self.graph.is_vertex(words[i]):
+                # add the word as a node in the graph if it doesn't already exist
+                self.graph.add_vertex(words[i])
+
+            # increment the edge from the previous word to the current word
+            self.graph.increment_edge(words[i-1], words[i])
 
     def get_next_word(self, word):
         if not self.graph.is_vertex(word):
