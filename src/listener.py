@@ -10,8 +10,7 @@ class StreamListener(tweepy.StreamListener):
         self.api = api
 
     def on_status(self, status):
-        if self.verbose:
-            print("Got tweet: {}".format(status.text))
+        print("Got tweet: {}".format(status.text))
 
         # parse the tweet
         reply_name, targets, tweetID = parse_tweet(status, self.bot_name)
