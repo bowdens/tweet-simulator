@@ -30,14 +30,22 @@ def create_tweet(api, reply_id, reply_name, target, send_tweet=True, verbose=Fal
         for tweet in all_tweets:
             # create list of words in tweet and remove disallowed ones
             words = tweet.split()
+            # keep track of a list of all the items we need to remove
+            # can't remove while iterating
+            toRemove = []
             for word in words:
                 # get rid of any t.co links (images)
                 if "t.co" in word:
-                    words.remove(word)
+                    toRemove.append(word)
                 # remove @ mentions
-                if word.startswith("@"):
-                    words.remove(word)
-
+                if word[0] == '@':
+                    toRemove.append(word)
+            if verbose:
+                print("removing {}".format(toRemove))
+            for word in toRemove:
+                words.remove(word)
+            if verbose:
+                print("adding words {} to markov".format(words))
             markov.add_words(words)
 
         reply_text = markov.create_sentence()
