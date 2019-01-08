@@ -14,9 +14,9 @@ def parse_tweet(tweet, name):
     return reply_name, targets, tweet.id
 
 
-def create_tweet(api, reply_id, reply_name, target, send_tweet=True, verbose=False):
+def create_tweet(api, reply_id, reply_name, target, log, send_tweet=True, verbose=False):
     if verbose:
-        print("Creating a tweet in response to @{} about {}".format(reply_name, target))
+        log.log("Creating a tweet in response to @{} about {}".format(reply_name, target))
 
     # get all the tweets
     all_tweets = get_all_tweets(api, target)
@@ -41,11 +41,11 @@ def create_tweet(api, reply_id, reply_name, target, send_tweet=True, verbose=Fal
                 if word[0] == '@':
                     toRemove.append(word)
             if verbose:
-                print("removing {}".format(toRemove))
+                log.log("removing {}".format(toRemove))
             for word in toRemove:
                 words.remove(word)
             if verbose:
-                print("adding words {} to markov".format(words))
+                log.log("adding words {} to markov".format(words))
             markov.add_words(words)
 
         reply_text = markov.create_sentence()
@@ -58,12 +58,12 @@ def create_tweet(api, reply_id, reply_name, target, send_tweet=True, verbose=Fal
         try:
             api.update_status(tweet_text, in_reply_to_status_id=reply_id)
         except Exception as e:
-            print("\terror with the following tweet: {}".format(e))
+            log.log("\terror sending the tweet: {}".format(e))
 
-        print("\tTweeted \n\"{}\"\n to \"{}\" in response to tweet #{}\n".format(tweet_text, target, reply_id))
+        log.log("\tTweeted \n\"{}\"\n to \"{}\" in response to tweet #{}\n".format(tweet_text, target, reply_id))
     else:
         if verbose:
-            print(
+            log.log(
                 "\tDID NOT tweet \n\"{}\"\n to \"{}\" in response to tweet #{}\n".format(tweet_text, target, reply_id))
 
 

@@ -3,3 +3,4 @@ venv/
 secret.py
 *.bin
 scratchpad.py
+*.txt
