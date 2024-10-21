@@ -1,4 +1,8 @@
 # tweet-simulator
+
+> ## Archival Notice
+> This repository has been archived. The code is old, no longer works, and is quite poorly written. Peruse with all due caution.
+
 A twitter bot that uses markov chains to simulate tweets from any user.
 
 Checkout [@sim\_tweet](https://www.twitter.com/sim_tweet) for the bot on twitter
